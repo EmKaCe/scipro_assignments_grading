@@ -1,27 +1,34 @@
-function updatePercentage(value, id){
-	const percentageId = id + "-percentage";
-	const input = document.getElementById(id)
-	const max = parseFloat(input.getAttribute("max"));
+const updatePercentage = (value, input) => {
 	const min = parseFloat(input.getAttribute("min"));
-	const factor = parseFloat(input.getAttribute("factor"))
+	const max = parseFloat(input.getAttribute("max"));
+	const factor = parseFloat(input.getAttribute("factor"));
 
-	if(parseFloat(value) > max){value = max}
-	if(parseFloat(value) < min){value = min;}
+	// Check if value is within the range, if not set it to the min or max, respectively
+	if (parseFloat(value) > max) {
+		value = max;
+	}
+	if (parseFloat(value) < min) {
+		value = min;
+	}
 
 	input.value = value;
 
-	const element = document.getElementById(percentageId);
-	element.innerText = value * factor + "%";
-	const gradePercentage = document.getElementById("grade-percentage");
-	const grade = document.getElementById("grade");
+	// Update the percentage value
+	input.parentElement.nextElementSibling.innerText = value * factor + "%";
+
+	// Update the total percentage
+	const totalPercentage = document.getElementById("grade-percentage");
 	const points = document.getElementsByClassName("point");
 	let sum = 0;
 
-	for(const point of points){
-		sum += parseFloat(point.getAttribute("factor"))*parseFloat(point.value);
+	for (const point of points) {
+		sum += parseFloat(point.getAttribute("factor")) * parseFloat(point.value);
 	}
 
-	gradePercentage.innerText = sum + "%";
+	totalPercentage.innerText = sum + "%";
+
+	// Update the final grade
+	const grade = document.getElementById("grade");
 	let gradeValue = "";
 
 	switch(true){
@@ -61,6 +68,7 @@ function updatePercentage(value, id){
 		default:
 			gradeValue = "N/A";
 	}
+
 	grade.innerText = gradeValue;
 }
 

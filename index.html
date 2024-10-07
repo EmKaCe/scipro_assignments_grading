@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+	<link href="https://unpkg.com/tippy.js@6/themes/light.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="./functions/headerscript.js"></script>
@@ -62,7 +63,7 @@
 					<br><br>
 					<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="300000" />
 					<div>
-						<input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
+						<input type="file" id="fileselect" name="fileselect[]" multiple="multiple" />
 						<div id="filedrag">Drop files here</div>
 					</div>
 					<div id="submitbutton">
@@ -103,10 +104,10 @@
 							min="0.0"
 							max="6.0"
 							step="0.5"
-							onchange="updatePercentage(this.value, this.id, this.getAttribute('factor'), 'codequality-percentage')"
-						>
+							onchange="updatePercentage(this.value, this)"
+						/>
 					</td>
-					<td id="codequality-grading-percentage">24%</td>
+					<td>24%</td>
 				</tr>
 				<tr>
 					<td class="grading-category">
@@ -122,9 +123,20 @@
 							</div>
 						</div>
 					</td>
-					<td><input id="codeexecution-grading" class="point" factor="4" type="number" value="6" min="0.0"
-								max="6.0" step="0.5" onchange="updatePercentage(this.value, this.id, this.getAttribute('factor'), 'codeexecution-percentage')"></td>
-					<td><p id="codeexecution-grading-percentage">24%</p></td>
+					<td>
+						<input
+							id="codeexecution-grading"
+							class="point"
+							factor="4"
+							type="number"
+							value="6"
+							min="0.0"
+							max="6.0"
+							step="0.5"
+							onchange="updatePercentage(this.value, this)"
+						/>
+					</td>
+					<td>24%</td>
 				</tr>
 				<tr>
 					<td class="grading-category">
@@ -139,9 +151,20 @@
 							<p>Weighting Factor: 4.0</p>
 						</div>
 					</td>
-					<td><input id="assignmentrequirements-grading" class="point" factor="4" type="number" value="6" min="0.0" max="6.0"
-								step="0.5" onchange="updatePercentage(this.value, this.id, this.getAttribute('factor'), 'assignmentrequirements-percentage')"></td>
-					<td><p id="assignmentrequirements-grading-percentage">24%</p></td>
+					<td>
+						<input
+							id="assignmentrequirements-grading"
+							class="point"
+							factor="4"
+							type="number"
+							value="6"
+							min="0.0"
+							max="6.0"
+							step="0.5"
+							onchange="updatePercentage(this.value, this)"
+						/>
+					</td>
+					<td>24%</td>
 				</tr>
 				<tr>
 					<td class="grading-category">
@@ -156,9 +179,20 @@
 							<p>Weighting Factor: 4.0</p>
 						</div>
 					</td>
-					<td><input id="scientific-grading" class="point" factor="4" type="number" value="6" min="0.0" max="6.0"
-								step="0.5" onchange="updatePercentage(this.value, this.id, this.getAttribute('factor'), 'scientific-percentage')"></td>
-					<td><p id="scientific-grading-percentage">24%</p></td>
+					<td>
+						<input
+							id="scientific-grading"
+							class="point"
+							factor="4"
+							type="number"
+							value="6"
+							min="0.0"
+							max="6.0"
+							step="0.5"
+							onchange="updatePercentage(this.value, this)"
+						/>
+					</td>
+					<td>24%</td>
 				</tr>
 				<tr>
 					<td class="grading-category">
@@ -173,9 +207,20 @@
 							<p>Weighting Factor: 1.0</p>
 						</div>
 					</td>
-					<td ><input id="creativity-grading" class="point" factor="1" type="number" value="4" min="0.0" max="4.0"
-								step="0.5" onchange="updatePercentage(this.value, this.id, this.getAttribute('factor'), 'creativity-percentage')"></td>
-					<td><p style="width: 60px;" id="creativity-grading-percentage">4%</p></td>
+					<td>
+						<input
+							id="creativity-grading"
+							class="point"
+							factor="1"
+							type="number"
+							value="4"
+							min="0.0"
+							max="4.0"
+							step="0.5"
+							onchange="updatePercentage(this.value, this)"
+						/>
+					</td>
+					<td>4%</td>
 				</tr>
 				<tr>
 					<td class="grading-category">
@@ -273,8 +318,8 @@
 							</table>
 						</div>
 					</td>
-					<td><p id="grade-percentage">100%</p></td>
-					<td><p id="grade">1.0 (A+)</p></td>
+					<td id="grade-percentage">100%</td>
+					<td id="grade">1.0 (A+)</td>
 				</tr>
 			</table>
 		</div>
@@ -289,18 +334,19 @@
 <script src="./functions/table.js"></script>
 <script src="./functions/session.js"></script>
 <script>
-	const gradingCategories = document.querySelectorAll(".grading-category");
-	gradingCategories.forEach(category => {
-		tippy(category, {
-			content: category.querySelector(".tooltip").innerHTML,
-			allowHTML: true,
-		});
-	});
-	6
-
 	if (debug) {generateBody();}
 	window.addEventListener("load", function() {
 		processJSONFile();
+
+		// Initialize tooltips
+		const gradingCategories = document.querySelectorAll(".grading-category");
+		gradingCategories.forEach(category => {
+			tippy(category, {
+				content: category.querySelector(".tooltip").innerHTML,
+				allowHTML: true,
+				theme: "light",
+			});
+		});
 	});
 </script>
 </body>

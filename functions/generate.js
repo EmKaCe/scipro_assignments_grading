@@ -1,4 +1,4 @@
-function generateBody() {
+const generateBody = () => {
 
 	// Wenn der Modus "grader" ist, wird die Tabelle angezeigt
 	if (mode === "grader"){
@@ -25,7 +25,7 @@ function generateBody() {
 	load();
 }
 
-function generateTabs() {
+const generateTabs = () => {
 	const assignmentSpecificContainer = document.createElement("div");
 	const assignmentSpecificCriteriasContainer = document.createElement("div");
 	const tabsButtonContainer = generateContainer("", ["tab-container"]);
@@ -72,7 +72,7 @@ function generateTabs() {
 	return assignmentSpecificContainer;
 }
 
-function generateTemplate(data) {
+const generateTemplate = (data) => {
 	const gradingTemplate = document.createElement("div");
 
 	for (const category in data) {
@@ -114,7 +114,7 @@ function generateTemplate(data) {
 	return gradingTemplate;
 }
 
-function generateButton(label, clickFunction, classList = [], id = "") {
+const generateButton = (label, clickFunction, classList = [], id = "") => {
 	/**
 	 * Generates button given a label, a function and classes.
 	 * @param {string} label - The text to be displayed on the button
@@ -131,21 +131,21 @@ function generateButton(label, clickFunction, classList = [], id = "") {
 	return button;
 }
 
-function generateTitle(title, classList = []) {
+const generateTitle = (title, classList = []) => {
 	const titleElement = document.createElement("p");
 	titleElement.innerText = title;
 	titleElement.classList.add(...classList)
 	return titleElement;
 }
 
-function generateContainer(id, classList = []) {
+const generateContainer = (id, classList = []) => {
 	const container = document.createElement("div");
 	container.id = id
 	container.classList.add(...classList);
 	return container;
 }
 
-function generateSubPointElement(id, label, category, criteria, mainPoint) {
+const generateSubPointElement = (id, label, category, criteria, mainPoint) => {
 	const subPointElement = document.createElement("li");
 
 	const checkBoxLabel = document.createElement("label");
@@ -169,7 +169,7 @@ function generateSubPointElement(id, label, category, criteria, mainPoint) {
 	return subPointElement;
 }
 
-function generateTextArea(id, classList = []) {
+const generateTextArea = (id, classList = []) => {
 	const textArea = document.createElement("textarea");
 	textArea.id = id;
 	textArea.type = "text";
@@ -177,7 +177,7 @@ function generateTextArea(id, classList = []) {
 	return textArea;
 }
 
-function maskAttribute(attributes, searchValues) {
+const maskAttribute = (attributes, searchValues) => {
 	let mask = 'input[type="checkbox"]:checked';
 	for (const index in attributes) {
 		mask += '[' + attributes[index] + '="' + searchValues[index] + '"]';
@@ -185,7 +185,7 @@ function maskAttribute(attributes, searchValues) {
 	return mask;
 }
 
-function multiLineIndent(text, indentation) {
+const multiLineIndent = (text, indentation) => {
 	let newText = "";
 	for (const line of text.split("\n")) {
 		newText += indentation + line + "\n";
@@ -193,7 +193,7 @@ function multiLineIndent(text, indentation) {
 	return newText;
 }
 
-function generateEvaluationText(data, previousText = "") {
+const generateEvaluationText = (data, previousText = "") => {
 	let text = previousText;
 
 	for (const category in data) {
@@ -237,7 +237,7 @@ function generateEvaluationText(data, previousText = "") {
 	return text;
 }
 
-function displayEvaluationText() {
+const displayEvaluationText = () => {
 	const evaluationTextField = document.getElementById("evaluation-textbox");
 	let generalCriteriaEvaluation = generateEvaluationText(generalCriteria);
 	if (generalCriteriaEvaluation.length > 0) {
