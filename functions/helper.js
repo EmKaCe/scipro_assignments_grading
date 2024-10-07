@@ -31,10 +31,6 @@ function formatTable(data) {
 	return result.join('\n');
 }
 
-function updatePct(points, weighting){
-	return (points * weighting)
-}
-
 function finalGrade(sum){
 	let gradeValue = "";
 	switch(true) {

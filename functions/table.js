@@ -1,3 +1,8 @@
+/**
+ * Updates the percentage value of the input field and the total percentage of the grading table
+ * @param {float} value The point value of the grading category
+ * @param {HTMLInputElement} input The input field element
+ */
 const updatePercentage = (value, input) => {
 	const min = parseFloat(input.getAttribute("min"));
 	const max = parseFloat(input.getAttribute("max"));
@@ -72,8 +77,12 @@ const updatePercentage = (value, input) => {
 	grade.innerText = gradeValue;
 }
 
-
-function getTableData() {
+/**
+ * Retrieves the data from the grading table and calculates the total percentage and final grade
+ * @returns {Array} The data of the grading table
+ */
+const getTableData = () => {
+	// Define the grading criteria and their factors
 	const gradingCriteria = {
 		"codequality-grading": { label: "1. Code quality & design", factor: 4.0 },
 		"codeexecution-grading": { label: "2. Code execution & results", factor: 4.0 },
@@ -82,21 +91,28 @@ function getTableData() {
 		"creativity-grading": { label: "5. Creativity", factor: 1.0 }
 	};
 
+	// Initialize the sum of points, weighted sum, and sum of points percentage
 	let sumPoints = 0;
 	let weightedSum = 0;
 	let sumPointsPct = 0;
 
+	// Calculate the total percentage and final grade based on the grading criteria
 	const tableData = Object.entries(gradingCriteria).map(([id, { label, factor }]) => {
+		// Retrieve the value of the input field
 		const value = parseFloat(document.getElementById(id).value);
-		const percentage = updatePct(value, factor);
+		// Calculate the percentage
+		const percentage = value * factor;
 
+		// Update the sum of points, weighted sum, and sum of points percentage
 		sumPoints += value;
 		weightedSum += value * factor;
 		sumPointsPct += parseFloat(percentage);
 
+		// Add the data of this grading criteria to the table data
 		return [label, value.toFixed(1), factor, percentage + " %"];
 	});
 
+	// Add the total percentage and final grade to the table data
 	tableData.push(
 		['Total Percentage Awarded', '-', '-', sumPointsPct.toFixed(1) + " %"],
 		['Final Note (Mark)', '-', '-', finalGrade(weightedSum)]
